@@ -15,7 +15,8 @@
  */
 
 'use strict';
-
+var fs = require('fs');
+var myParser = require("body-parser");
 var express = require('express'),
   app = express(),
   vcapServices = require('vcap_services'),
@@ -49,6 +50,30 @@ app.get('/', function(req, res) {
     ct: req._csrfToken,
     GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID
   });
+});
+// app.use(bodyParser.json());
+
+app.post('/api/alchemy', function(request, response) {
+
+  var watson = require('watson-developer-cloud');
+
+  var alchemy_language = watson.alchemy_language({
+    api_key: '69d17cec4018ad992ed58383782e04b3c67fb66c'
+  });
+
+  var someResponse = null;
+  alchemy_language.sentiment(request.body, function (err, res) {
+    if (err)
+      console.log('error:', err);
+    else
+      console.log(JSON.stringify(res, null, 2));
+      someResponse = JSON.stringify(res, null, 2);
+      response.end(someResponse);
+      // response.end(JSON.stringify(res, null, 2));
+  });
+  console.log(request.body);
+  // response.end(someResponse);
+
 });
 
 // Get token using your credentials

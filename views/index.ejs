@@ -63,14 +63,25 @@
                 {{recorder.status.isRecording ? 'Stop Recording' : 'Start Recording'}}
             </button>
 
-            <button class="btn btn-primary" ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
-                    type="button" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
-                {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}
+            <button class="btn btn-primary" ng-click="recorder.flag()" ng-disabled="!recorder.status.isRecording || recorder.audioModel">
+                Flag
             </button>
 
             <button class="btn btn-primary" ng-click="recorder.save()" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
                 Download
             </button>
+            <!-- {{recorder.status.flags}} -->
+            <div ng-repeat="item in recorder.status.flags">
+              <div ng-show="recorder.status.currentOptions == item">
+                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item)">Exact</button>
+                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-5)">-5</button>
+                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-15)">-15</button>
+                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-30)">-30</button>
+                <!-- <button ng-show="(recorder.elapsedTime-item) > 5"> TEST GREATER 5 </button> -->
+              </div>
+              <button ng-click="recorder.showSkipOptions(item)">{{item}}</button>
+            </div>
+            <!-- <a ng-repeat="item in recorder.status.flags" ng-click="recorder.skipToSeconds(item)">{{item}}</a> -->
 
             <div style="max-width: 600px; margin-left: auto; margin-right: auto;">
                 <div ng-show="recorder.status.isConverting">
@@ -86,10 +97,20 @@
                     <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
                 </div>
             </div>
+            <div class="row">
+              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.reset()">Backward</btn>
+            <button class="btn btn-primary" ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
+                    type="button" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
+                {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}
+            </button>
+              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.end()">Forward</btn>
+              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.mute()">Mute/Unmute</btn>
+            </div>
+
 
             <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 20px;
         border: solid 2px #333; padding: 20px 10px;" ng-if="recorder.status.isRecording">
-                {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
+                {{ recorder.elapsedTimeSeconds }}
             </h2>
         </div>
 
@@ -101,12 +122,11 @@
             Safari or Internet Explorer, you can install <a href="https://get.adobe.com/flashplayer/">Adobe Flash</a> to
             use this feature.
         </div>
-    </ng-audio-recorder>
+       </ng-audio-recorder>
+       <br/>
 
       </div>
-        <textarea class="form-control" rows="10" readonly id="resultsText" dir="auto"></textarea>
-                                  <!-- <textarea class="form-control" readonly id="resultsJSON"></textarea> -->
-
+        <input ng-model="test" class="form-control" rows="10" id="resultsText" dir="auto"></input>
 
         <div class="col-lg-12 col-md-12 col-sm-12" ng-show="randomHide">
           <div style="margin-top:2em;">

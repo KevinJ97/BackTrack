@@ -12,33 +12,6 @@
     <link rel="shortcut icon" href="images/favicon.ico" />
   </head>
   <body ng-app="BackTrack">
-    <!-- top nav section -->
-    <div class="header">
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="#/">BackTrack</a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#/">Home</a></li>
-              <li><a ng-href="#/about">Recordings</a></li>
-              <li><a ng-href="#/">Transcription</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Service Description Bar -->
     <!-- Step 1 Section-->
     <div class="container" ng-controller="homeController">
@@ -50,19 +23,24 @@
  -->
         <ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false">
         <div ng-if="recorder.isAvailable">
-
+            <img ng-hide="recorder.status.isRecording" src="images/Background_Green.png" class="backgrounds"></img>
+            <img ng-show="recorder.status.isRecording" src="images/Background_Red.png" class="backgrounds"></img>
+            <!-- <img ng-src="{{recorder.status.isRecording ? 'images/Background_Green.png' : 'images/Background_Red.png'}}" -->
             <div ng-if="recorder.status.isDenied === true" class="btn btn-primary">
                 You need to grant permission for this application to USE your microphone.
             </div>
-            <img ng-hide="recorder.status.isRecording" src="images/play-red.svg" class="record-logo"></img>
-            <img ng-show="recorder.status.isRecording" src="images/stop-red.svg" class="record-logo">
+            <img ng-hide="recorder.status.isRecording" src="images/microphone_hover.svg" class="record-logo"></img>
+            <img ng-show="recorder.status.isRecording" src="images/microphone_running.svg" class="record-logo"></img>
             <br/><br/>
             <!-- <button id="recordButton" class="btn btn-primary" ng-click="recordButton()">Record Audio</button> -->
-
-            <button ng-click="recorder.toggleRecord()" id="recordButton" class="btn btn-primary" type="button">
+            <div class="btn-group btn-group-lg" role="group">
+            <button src="images/Background_Red.png" ng-click="recorder.toggleRecord()" id="recordButton" class="btn btn-primary" type="IMAGE">
                 {{recorder.status.isRecording ? 'Stop Recording' : 'Start Recording'}}
             </button>
-
+            <button class="btn btn-lg btn-primary" ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
+                    type="button" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
+                {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}
+            </button>
             <button class="btn btn-primary" ng-click="recorder.flag()" ng-disabled="!recorder.status.isRecording || recorder.audioModel">
                 Flag
             </button>
@@ -70,18 +48,15 @@
             <button class="btn btn-primary" ng-click="recorder.save()" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
                 Download
             </button>
-            <!-- {{recorder.status.flags}} -->
-            <div ng-repeat="item in recorder.status.flags">
-              <div ng-show="recorder.status.currentOptions == item">
-                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item)">Exact</button>
-                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-5)">-5</button>
-                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-15)">-15</button>
-                <button class="btn btn-primary" ng-click="recorder.skipToSeconds(item-30)">-30</button>
-                <!-- <button ng-show="(recorder.elapsedTime-item) > 5"> TEST GREATER 5 </button> -->
-              </div>
-              <button ng-click="recorder.showSkipOptions(item)">{{item}}</button>
             </div>
-            <!-- <a ng-repeat="item in recorder.status.flags" ng-click="recorder.skipToSeconds(item)">{{item}}</a> -->
+            <br/><br/>
+            <div class="dropdown">
+              <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Flags
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li ng-repeat="item in recorder.status.flags"><a ng-click="recorder.skipToSeconds(item-10)">{{item + ' Seconds'}}</li>
+              </ul>
+            </div>
 
             <div style="max-width: 600px; margin-left: auto; margin-right: auto;">
                 <div ng-show="recorder.status.isConverting">
@@ -97,22 +72,20 @@
                     <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
                 </div>
             </div>
-            <div class="row">
-              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.reset()">Backward</btn>
-            <button class="btn btn-primary" ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
-                    type="button" ng-disabled="recorder.status.isRecording || !recorder.audioModel">
-                {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}
-            </button>
-              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.end()">Forward</btn>
-              <btn ng-show="recorder.status.isPlaySelected" class="btn btn-primary" ng-click="recorder.mute()">Mute/Unmute</btn>
-            </div>
-
-
-            <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 20px;
+              
+            <br/>
+            {{recorder.elapsedTimeSeconds + ' Seconds'}}
+            <br/>
+            {{ recorder.duration }}
+            <!-- <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 20px;
         border: solid 2px #333; padding: 20px 10px;" ng-if="recorder.status.isRecording">
                 {{ recorder.elapsedTimeSeconds }}
             </h2>
-        </div>
+            <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 20px;
+        border: solid 2px #333; padding: 20px 10px;" ng-if="recorder.status.isRecording">
+                {{ recorder.duration }}
+            </h2>
+        </div> -->
 
 
         <div ng-if="!recorder.isAvailable">
@@ -127,8 +100,7 @@
        <br/>
 
       </div>
-        <input ng-model="test" class="form-control" rows="10" id="resultsText" dir="auto"></input>
-
+        <textarea ng-model="test" class="form-control" readonly rows="10" id="resultsText" dir="auto"></textarea>
         <div class="col-lg-12 col-md-12 col-sm-12" ng-show="randomHide">
           <div style="margin-top:2em;">
             <span style="font-size:1.563em;font-weight:400;color:#323232;-webkit-user-select:none;-moz-user-select:none;">

@@ -7,11 +7,15 @@
 
 body {
   padding: 0;
-  background-color: #FD750F;
+  /*background-color: #FD750F;*/
+  background-position: center; 
 }
 
+h1 {
+  font-size: 100px;
+}
 .BackTrack {
-  background-color: #FD750F;
+  /*background-color: #FD750F;*/
   color: white;
   text-align: center;
 }
@@ -44,7 +48,7 @@ body {
   padding: 14px 24px;
 }
 .jumbo-logo {
-  width: 100px;
+  width: 150px;
 }
 
 /* Supporting marketing content */
@@ -55,6 +59,12 @@ body {
   margin-top: 28px;
 }
 
+#resultsText {
+  background-color:transparent;
+  color: white;
+  font-size: 50px;
+  border: none;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {
@@ -75,12 +85,20 @@ body {
   }
 }
 
+.backgrounds {
+    width: 100%; 
+    height: 100%; 
+    position: fixed; 
+    left: 0px; 
+    top: 0px; 
+    z-index: -1;
+}
 .navbar {
   margin-bottom: 0px;
 }
 
 .record-logo {
-  width: 100px;
+  width: 150px;
 }
 
 .form-control {
@@ -90,4 +108,8 @@ body {
 .wave-center {
   margin-left: auto;
   margin-right: auto;
+}
+
+.dropdown-menu {
+  left: 40%;
 }

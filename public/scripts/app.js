@@ -13,6 +13,7 @@ angular.module('BackTrack', ['angularAudioRecorder']).controller('homeController
 		window.alert('tes');
 	}
 
+	
 
 
 })

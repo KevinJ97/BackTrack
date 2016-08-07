@@ -43,27 +43,24 @@
     <!-- Step 1 Section-->
     <div class="container" ng-controller="homeController">
       <!-- Step 3 Section-->
-      <div class="" >
+      <div class="BackTrack" >
         <h1>BackTrack</h1>
-        <img ng-show="playButton" src="images/play-red.svg" class="record-logo"></img>
-        <img ng-hide="playButton" src="images/stop-red.svg" class="record-logo">
-        <br/><br/>
+        
 <!--         <button id="recordButton" class="btn btn-primary">Play Audio</button> 
  -->
-        <ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit">
+        <ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false">
         <div ng-if="recorder.isAvailable">
 
             <div ng-if="recorder.status.isDenied === true" class="btn btn-primary">
                 You need to grant permission for this application to USE your microphone.
             </div>
+            <img ng-hide="recorder.status.isRecording" src="images/play-red.svg" class="record-logo"></img>
+            <img ng-show="recorder.status.isRecording" src="images/stop-red.svg" class="record-logo">
+            <br/><br/>
             <!-- <button id="recordButton" class="btn btn-primary" ng-click="recordButton()">Record Audio</button> -->
 
-            <button id="recordButton" class="btn btn-primary" ng-click="recorder.startRecord()" type="button">
-                Start Record
-            </button>
-
-            <button class="btn btn-primary" ng-click="recorder.stopRecord()" type="button" ng-disabled="recorder.status.isRecording === false">
-                Stop Record
+            <button ng-click="recorder.toggleRecord()" id="recordButton" class="btn btn-primary" type="button">
+                {{recorder.status.isRecording ? 'Stop Recording' : 'Start Recording'}}
             </button>
 
             <button class="btn btn-primary" ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
@@ -75,17 +72,17 @@
                 Download
             </button>
 
-            <div style="max-width: 600px">
+            <div style="max-width: 600px; margin-left: auto; margin-right: auto;">
                 <div ng-show="recorder.status.isConverting">
                     Please wait while your recording is processed.
                 </div>
 
                 <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
-                    <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
+                    <ng-audio-recorder-analyzer width="95%"></ng-audio-recorder-analyzer>
                 </div>
                 <br/>
 
-                <div ng-show="!recorder.status.isRecording && recorder.audioModel">
+                <div class="wave-center" ng-show="!recorder.status.isRecording && recorder.audioModel">
                     <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
                 </div>
             </div>
@@ -93,12 +90,6 @@
             <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 20px;
         border: solid 2px #333; padding: 20px 10px;" ng-if="recorder.status.isRecording">
                 {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
-            </h2>
-
-
-            <h2 style="font-family: sans-serif; text-align: center; border: solid 2px #333; padding: 20px 10px;"
-                ng-if="recorder.status.isRecording">
-                Remaining Time: {{recorder.timeLimit - recorder.elapsedTime}}
             </h2>
         </div>
 
@@ -117,7 +108,7 @@
                                   <!-- <textarea class="form-control" readonly id="resultsJSON"></textarea> -->
 
 
-        <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-12 col-md-12 col-sm-12" ng-show="randomHide">
           <div style="margin-top:2em;">
             <span style="font-size:1.563em;font-weight:400;color:#323232;-webkit-user-select:none;-moz-user-select:none;">
               Word Alternatives
@@ -148,6 +139,7 @@
 
           </div><!-- /.col -->
         </div><!-- /.row -->
+        <br/>
 
       </div><!-- /.container -->
        <div class="footer">

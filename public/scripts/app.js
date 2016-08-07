@@ -1,6 +1,7 @@
 angular.module('BackTrack', ['angularAudioRecorder']).controller('homeController', function($scope) {
 
 	$scope.playButton = true;
+	$scope.randomHide = false;
 	$scope.recordButton = function recordButton() {
 		if ($scope.playButton) {
 			$scope.playButton = false;
@@ -9,7 +10,7 @@ angular.module('BackTrack', ['angularAudioRecorder']).controller('homeController
 			$scope.playButton = true;
 			recorder.stopRecord();
 		}
-		console.log('Record Button Pressed');
+		window.alert('tes');
 	}
 
 

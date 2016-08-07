@@ -13,6 +13,7 @@ body {
 .BackTrack {
   background-color: #FD750F;
   color: white;
+  text-align: center;
 }
 
 /* Make the masthead heading the same height as the navigation */
@@ -84,4 +85,9 @@ body {
 
 .form-control {
   font-size: 20px;
+}
+
+.wave-center {
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -113,3 +113,7 @@ h1 {
 .dropdown-menu {
   left: 40%;
 }
+
+.waveSurfer {
+  overflow-x: hidden;
+}
